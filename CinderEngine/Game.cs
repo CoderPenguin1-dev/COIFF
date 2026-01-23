@@ -11,11 +11,12 @@ namespace CinderEngine;
 public class Game
 {
     #region Fields
-    private readonly string _filePath;
-    private LuaState _luaState;
     public string GameTitle { get; private set; }
     public string Author { get; private set; }
     public string GameVersion { get; private set; }
+    
+    private readonly string _filePath;
+    private LuaState _luaState;
     private string StartingId { get; set; }
     private readonly List<StoryNode> _nodes = [];
     private readonly List<Asset> _assets = [];
