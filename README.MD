@@ -1,5 +1,5 @@
 # Cinder's Own Interactive Fiction Framework
-COIFF is a basic engine made for "choose-your-own-adventure" style games (like gamebooks).
+COIFF is a basic engine made for "choose-your-own-adventure" style games (often called storygames).
 
 The framework is split into two main parts, the Engine and the Frontend.
 * The [Cinder Engine](CinderEngine) runs the game's logic.
