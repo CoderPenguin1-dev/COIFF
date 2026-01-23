@@ -8,14 +8,14 @@ using Lua.Standard;
 
 namespace CinderEngine;
 
-internal class Game
+public class Game
 {
     #region Fields
     private readonly string _filePath;
     private LuaState _luaState;
-    internal string GameTitle { get; private set; }
-    internal string Author { get; private set; }
-    internal string GameVersion { get; private set; }
+    public string GameTitle { get; private set; }
+    public string Author { get; private set; }
+    public string GameVersion { get; private set; }
     private string StartingId { get; set; }
     private readonly List<StoryNode> _nodes = [];
     private readonly List<Asset> _assets = [];
@@ -24,7 +24,7 @@ internal class Game
     private bool _isInitialized = false;
     #endregion
     
-    internal Game(string gameFilePath)
+    public Game(string gameFilePath)
     {
         _filePath = gameFilePath;
         ResetEngine();
@@ -279,32 +279,26 @@ internal class Game
         return text;
     }
     
-    internal void ParseSelectedOption(int optionIndex)
+    public void ParseSelectedOption(int optionIndex)
     {
         SetCurrentNode(_currentNode.OptionIDs[optionIndex]);
     }
 
-    internal string GetNodeText()
+    public string GetNodeText()
     {
         return _currentNode.Text;
     }
 
-    internal string[] GetNodeOptions()
+    public string[] GetNodeOptions()
     {
         return _currentNode.Options;
     }
 
-    internal void ResetEngine()
+    public void ResetEngine()
     {
         _luaState = LuaState.Create();
         _luaState.OpenStandardLibraries();
         InitScriptApiFunctions();
         InitGame();
     }
-}
-
-internal class LuaScript
-{
-    internal string Script { get; set; }
-    internal string ScriptId { get; set; }
 }

@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="800" Height="450"
+        x:Class="Flame.MainWindow"
+        Title="Flame">
+    <Grid ColumnDefinitions="*, Auto">
+        <ScrollViewer Name="ScrollViewer" Margin="10" AllowAutoHide="False" VerticalScrollBarVisibility="Visible">
+            <TextBlock Name="StoryText"
+                FontFamily="Mono"
+                HorizontalAlignment="Left"
+                TextWrapping="Wrap"
+            ></TextBlock>
+        </ScrollViewer>
+        
+        <Grid Grid.Column="1" RowDefinitions="*, Auto" Margin="20" RowSpacing="15">
+            <ListBox Name="OptionListBox" Grid.Row="0"></ListBox>
+            <DockPanel Grid.Row="1" HorizontalAlignment="Center" HorizontalSpacing="15">
+                <Button Name="NextButton" Click="NextButton_OnClick">Select Option</Button>
+                <Button Name="QuitButton" Click="QuitButton_OnClick">Quit</Button>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
