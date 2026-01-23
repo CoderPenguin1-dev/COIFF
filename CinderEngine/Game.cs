@@ -129,8 +129,9 @@ public class Game
                 StoryNode node = new();
                 var stream = entry.Open();
                 StreamReader reader = new(stream);
+                
                 string line = reader.ReadLine();
-                if (line.Contains(':'))
+                if (line.Contains(':')) // Check if there's a connected script.
                 {
                     node.NodeId = line.Substring(0, line.IndexOf(':')).Trim();
                     node.ScriptId = line.Substring(line.IndexOf(':') + 1).Trim();
@@ -165,6 +166,7 @@ public class Game
                     options.Add(line.Substring(line.IndexOf(':') + 1).Trim());
                     line = reader.ReadLine();
                 }
+                
                 node.OptionIDs = optionIds.ToArray();
                 node.Options = options.ToArray();
                 _nodes.Add(node);
@@ -176,6 +178,7 @@ public class Game
                 StreamReader reader = new(stream);
                 Asset asset = new() {AssetId = reader.ReadLine(), Text = ""};
                 asset.Text = "";
+                
                 string line = reader.ReadLine();
                 while (line != null)
                 {
@@ -191,7 +194,8 @@ public class Game
                 lua.Script = "";
                 var stream = entry.Open();
                 StreamReader reader = new(stream);
-                lua.ScriptId = reader.ReadLine().Substring(2).Trim();
+                lua.ScriptId = reader.ReadLine()[2..].Trim(); // Removes the "--" from the line.
+                
                 string line = reader.ReadLine();
                 while (line != null)
                 {
@@ -239,31 +243,30 @@ public class Game
 
     private async Task<string> FormatNodeText(string text)
     {
-        // Insert variable values.
-        List<string> variableNames = [];
-        bool inVariable = false;
+        List<string> insertionVariables = [];
+        bool inInsertion = false;
         string currentVarName = "";
         foreach (char c in text)
         {
-            if (c == '{')
+            if (c == '{') // The start of an insertion.
             {
-                inVariable = true;
+                inInsertion = true;
                 continue;
             }
 
-            if (c == '}')
+            if (c == '}') // The end of an insertion.
             {
-                inVariable = false;
-                variableNames.Add(currentVarName);
+                inInsertion = false;
+                insertionVariables.Add(currentVarName);
                 currentVarName = "";
                 continue;
             }
                     
-            if (inVariable)
+            if (inInsertion)
                 currentVarName += c;
         }
 
-        foreach (string variableName in variableNames)
+        foreach (string variableName in insertionVariables)
         {
             var variable = await _luaState.DoStringAsync($"return {variableName}");
             if (variable[0].TypeToString() != "nil") // Checking if the variable doesn't exist. Must be an asset instead.
