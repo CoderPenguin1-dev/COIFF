@@ -23,8 +23,8 @@ public partial class App : Application
             // Find the game file.
             if (args.Length > 0)
                 filePath = args[0];
-            else if (File.Exists("game.cyoa"))
-                filePath = "game.cyoa";
+            else if (File.Exists("game.cstory"))
+                filePath = "game.cstory";
             
             if (filePath == string.Empty)
                 return;
