@@ -25,9 +25,6 @@ public partial class App : Application
                 filePath = args[0];
             else if (File.Exists("game.cstory"))
                 filePath = "game.cstory";
-            
-            if (filePath == string.Empty)
-                return;
 
             desktop.MainWindow = new MainWindow()
             {

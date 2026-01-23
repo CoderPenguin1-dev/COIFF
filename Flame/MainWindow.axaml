@@ -5,21 +5,27 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         Width="800" Height="450"
         x:Class="Flame.MainWindow"
-        Title="Flame">
+        Title="Flame"
+        Loaded="Control_OnLoaded">
     <Grid ColumnDefinitions="*, Auto">
         <ScrollViewer Name="ScrollViewer" Margin="10" AllowAutoHide="False" VerticalScrollBarVisibility="Visible">
             <TextBlock Name="StoryText"
                 FontFamily="Mono"
                 HorizontalAlignment="Left"
                 TextWrapping="Wrap"
-            ></TextBlock>
+            >Click "Open Story" to play it.</TextBlock>
         </ScrollViewer>
         
         <Grid Grid.Column="1" RowDefinitions="*, Auto" Margin="20" RowSpacing="15">
             <ListBox Name="OptionListBox" Grid.Row="0"></ListBox>
             <DockPanel Grid.Row="1" HorizontalAlignment="Center" HorizontalSpacing="15">
                 <Button Name="NextButton" Click="NextButton_OnClick">Select Option</Button>
-                <Button Name="QuitButton" Click="QuitButton_OnClick">Quit</Button>
+                <DockPanel VerticalSpacing="5">
+                    <Button Name="QuitButton" Click="QuitButton_OnClick" DockPanel.Dock="Bottom" 
+                            HorizontalAlignment="Center"
+                    >Quit</Button>
+                    <Button Name="OpenGameButton" Click="OpenGameButton_OnClick">Open Story</Button>
+                </DockPanel>
             </DockPanel>
         </Grid>
     </Grid>
