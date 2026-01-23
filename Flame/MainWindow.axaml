@@ -21,10 +21,10 @@
             <DockPanel Grid.Row="1" HorizontalAlignment="Center" HorizontalSpacing="15">
                 <Button Name="NextButton" Click="NextButton_OnClick">Select Option</Button>
                 <DockPanel VerticalSpacing="5">
-                    <Button Name="QuitButton" Click="QuitButton_OnClick" DockPanel.Dock="Bottom" 
+                    <Button Name="OpenGameButton" Click="OpenGameButton_OnClick" DockPanel.Dock="Top">Open Story</Button>
+                    <Button Name="QuitButton" Click="QuitButton_OnClick" 
                             HorizontalAlignment="Center"
                     >Quit</Button>
-                    <Button Name="OpenGameButton" Click="OpenGameButton_OnClick">Open Story</Button>
                 </DockPanel>
             </DockPanel>
         </Grid>

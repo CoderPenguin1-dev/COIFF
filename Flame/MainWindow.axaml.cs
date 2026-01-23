@@ -20,13 +20,16 @@ public partial class MainWindow : Window
     {
         if (Design.IsDesignMode) return; // Ignore everything else if it's the designer.
         
-        // Still none? Kill the whole damn app. Useless without one!
+        // Check if there already was a game specified.
         if (GameFilePath != string.Empty)
         {
             _game = new(GameFilePath);
             OpenGame();
+            if (GameFilePath == "game.cstory") // Hide the Open Story button if the default game was found.
+                OpenGameButton.IsVisible = false;
         }
-        
+
+
     }
     
     private void NextButton_OnClick(object? sender, RoutedEventArgs e)
