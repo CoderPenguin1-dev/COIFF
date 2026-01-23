@@ -22,7 +22,6 @@ public class Game
     private readonly List<Asset> _assets = [];
     private readonly List<LuaScript> _scripts = [];
     private StoryNode _currentNode;
-    private bool _isInitialized = false;
     #endregion
     
     public Game(string gameFilePath)
@@ -111,7 +110,6 @@ public class Game
     
     private void InitGame()
     {
-        if (_isInitialized) return;
         ZipArchive archive = ZipFile.OpenRead(_filePath);
         foreach (var entry in archive.Entries)
         {
@@ -206,7 +204,6 @@ public class Game
         
         SetCurrentNode(StartingId);
         archive.Dispose();
-        _isInitialized = true;
     }
     
     private async void SetCurrentNode(string nodeId)
