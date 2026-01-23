@@ -8,7 +8,7 @@ namespace Flame;
 public partial class MainWindow : Window
 {
     private readonly Game _game;
-    internal string GameFilePath { get; set; } = "game.cyoa";
+    internal string GameFilePath { get; set; } = "game.cstory";
     public MainWindow()
     {
         InitializeComponent();
