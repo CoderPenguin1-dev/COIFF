@@ -28,8 +28,6 @@ public partial class MainWindow : Window
             if (GameFilePath == "game.cstory") // Hide the Open Story button if the default game was found.
                 OpenGameButton.IsVisible = false;
         }
-
-
     }
     
     private void NextButton_OnClick(object? sender, RoutedEventArgs e)
