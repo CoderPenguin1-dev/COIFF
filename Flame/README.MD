@@ -1,5 +1,5 @@
 # Flame
-Flame is a simple Cinder Engine frontend made with AvaloniaUI in .NET 10.
+Flame is a simple Cinder Engine frontend made with AvaloniaUI in .NET 10.0.
 
 ## Building
 Clone the repo:
