@@ -2,6 +2,10 @@
 Flame is a simple Cinder Engine frontend made with AvaloniaUI in .NET 10.0.
 
 ## Building
+### Prerequisites
+* [.NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+* CinderEngine (already in referenced, no action required)
+
 Clone the repo:
 
     git clone https://github.com/CoderPenguin1-dev/COIFF.git
