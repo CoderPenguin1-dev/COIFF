@@ -11,6 +11,8 @@ public partial class MainWindow : Window
 {
     private Game _game;
     internal string GameFilePath { get; set; } = string.Empty;
+    internal bool ShowOpenButton { get; set; } = true;
+    
     public MainWindow()
     {
         InitializeComponent();
@@ -26,7 +28,9 @@ public partial class MainWindow : Window
             _game = new(GameFilePath);
             OpenGame();
             if (GameFilePath == "game.cstory") // Hide the Open Story button if the default game was found.
-                OpenGameButton.IsVisible = false;
+                ShowOpenButton = false;
+            
+            OpenGameButton.IsVisible = ShowOpenButton;
         }
     }
     

@@ -32,7 +32,6 @@ public class Game
 
     private void InitScriptApiFunctions()
     {
-        // SetCurrentNode(nodeId) -- Sets the current active node.
         _luaState.Environment["SetCurrentNode"] = new LuaFunction((context, ct) =>
         {
             var arg1 = context.GetArgument<string>(0);
@@ -40,37 +39,25 @@ public class Game
             return new(0);
         });
         
-        // SetNodeText(text) -- Sets the current node's text. Isn't permanent.
         _luaState.Environment["SetNodeText"] = new LuaFunction((context, ct) =>
         {
             var arg1 = context.GetArgument<string>(0);
-            StoryNode node = new()
-            {
-                Text = arg1,
-                NodeId = _currentNode.NodeId,
-                ScriptId = _currentNode.ScriptId,
-                OptionIDs = _currentNode.OptionIDs,
-                Options = _currentNode.Options
-            };
-            _currentNode = node;
+            SetNodeText(arg1);
             return new(0);
         });
         
-        // GetNodeText() -- Returns the current node's text.
         _luaState.Environment["GetNodeText"] = new LuaFunction((context, ct) =>
         {
             context.Return(GetNodeText());
             return new(0);
         });
         
-        // GetNodeId() -- Returns the current node's ID.
         _luaState.Environment["GetNodeId"] = new LuaFunction((context, ct) =>
         {
             context.Return(_currentNode.NodeId);
             return new(0);
         });
         
-        // GetAsset(assetId) -- Returns the string of the request asset file.
         _luaState.Environment["GetAsset"] = new LuaFunction((context, ct) =>
         {
             var arg1 =  context.GetArgument<string>(0);
@@ -85,14 +72,12 @@ public class Game
             return new(0);
         });
         
-        // ResetEngine() -- Fully resets the engine, rereading the game file.
         _luaState.Environment["ResetEngine"] = new LuaFunction((context, ct) =>
         {
             ResetEngine();
             return new(0);
         });
         
-        // ClearEnvironment() -- Clears the engine's Lua environment.
         _luaState.Environment["ClearEnvironment"] = new LuaFunction((context, ct) =>
         {
             _luaState = LuaState.Create();
@@ -100,11 +85,38 @@ public class Game
             InitScriptApiFunctions();
             return new(0);
         });
-
+        
         _luaState.Environment["FormatNodeText"] = new LuaFunction(async (context, ct) =>
         {
-            _currentNode.Text = await FormatNodeText(_currentNode.Text);
+            SetNodeText(await FormatNodeText(_currentNode.Text));
             return 0;
+        });
+        
+        _luaState.Environment["SetNodeOptions"] = new LuaFunction((context, ct) =>
+        {
+            var args1 = context.GetArgument<string[]>(0);
+            var args2 = context.GetArgument<string[]>(1);
+            
+            SetNodeOptions(args1, args2);
+            return new(0);
+        });
+        
+        _luaState.Environment["GetNodeOptionLabels"] = new LuaFunction((context, ct) =>
+        {
+            LuaTable value = new();
+            foreach (string label in _currentNode.Options)
+                value.Insert(1 + value.ArrayLength, label);
+            context.Return(value);
+            return new(0);
+        });
+        
+        _luaState.Environment["GetNodeOptionIds"] = new LuaFunction((context, ct) =>
+        {
+            LuaTable value = new();
+            foreach (string label in _currentNode.OptionIds)
+                value.Insert(1 + value.ArrayLength, label);
+            context.Return(value);
+            return new(0);
         });
     }
     
@@ -167,7 +179,7 @@ public class Game
                     line = reader.ReadLine();
                 }
                 
-                node.OptionIDs = optionIds.ToArray();
+                node.OptionIds = optionIds.ToArray();
                 node.Options = options.ToArray();
                 _nodes.Add(node);
             }
@@ -216,14 +228,8 @@ public class Game
         {
             if (node.NodeId == nodeId)
             {
-                _currentNode = new StoryNode()
-                {
-                    NodeId = nodeId,
-                    Text = await FormatNodeText(node.Text),
-                    Options = node.Options,
-                    OptionIDs = node.OptionIDs,
-                    ScriptId = node.ScriptId
-                };
+                _currentNode = node;
+                SetNodeText(await FormatNodeText(node.Text));
                 
                 if (_currentNode.ScriptId != string.Empty)
                 {
@@ -243,6 +249,7 @@ public class Game
 
     private async Task<string> FormatNodeText(string text)
     {
+        string nodeText = _currentNode.Text;
         List<string> insertionVariables = [];
         bool inInsertion = false;
         string currentVarName = "";
@@ -280,11 +287,35 @@ public class Game
         return text;
     }
     
+    private void SetNodeText(string text)
+    {
+        _currentNode = new StoryNode()
+        {
+            Text = text,
+            NodeId = _currentNode.NodeId,
+            Options = _currentNode.Options,
+            OptionIds = _currentNode.OptionIds,
+            ScriptId = _currentNode.ScriptId
+        };
+    }
+    
+    private void SetNodeOptions(string[] optionLabels, string[] optionIds)
+    {
+        _currentNode = new StoryNode()
+        {
+            Text = _currentNode.Text,
+            NodeId = _currentNode.NodeId,
+            Options = optionLabels,
+            OptionIds = optionIds,
+            ScriptId = _currentNode.ScriptId
+        };
+    }
+    
     public void ParseSelectedOption(int optionIndex)
     {
-        SetCurrentNode(_currentNode.OptionIDs[optionIndex]);
+        SetCurrentNode(_currentNode.OptionIds[optionIndex]);
     }
-
+    
     public string GetNodeText()
     {
         return _currentNode.Text;

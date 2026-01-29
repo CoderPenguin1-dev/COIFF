@@ -29,6 +29,7 @@ public partial class App : Application
             desktop.MainWindow = new MainWindow()
             {
                 GameFilePath = filePath,
+                ShowOpenButton = (filePath == string.Empty)
             };
         }
 

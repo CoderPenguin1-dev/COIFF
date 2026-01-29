@@ -2,7 +2,7 @@
 
 ## Basic Info
 * The main purpose of scripts are to control the flow of the story, store relevant data (ex. inventory), or whatever is needed.
-    They can also change the data of nodes.
+They can also change the data of nodes.
 * Scripts are written in Lua and can be attached to nodes.
 * A single node can have a single script. They can be added by adding the Script's ID next to the Node's ID (`nodeID : scriptID`).
 * You can insert variables into a node's text by using `{variable}`. See the docs for [Nodes](NodeFile.md) for more info.
@@ -10,7 +10,15 @@
 ## Important Notes
 * As soon as a non-local variable or function is defined, it will stay within the scripting environment until the engine is reset.
 Keep this in mind when switching nodes.
-* Due to the above, consider having a single-run init script that defines all needed variables and functions.
+    * Due to the above, consider having a single-run init script that defines all needed variables and functions.
+* As of now, only the standard library is loaded.
+* Avoid using `print()` as TTY-based frontends could potentially break.
+
+## Limitations
+* Due to how story files are loaded, modules that are built-in the story file are *not* supported.
+    * They can be loaded from outside the story file, but this isn't advised at all.
+    In turn avoid using modules unless strictly needed.
+* Not all standard library functions are supported.
 
 ## Setting Up
 First, create a new `.lua` file. Now on the first line, add in a comment with the script's ID. (ex. `--MyScript`).
@@ -22,23 +30,27 @@ Now your script will run whenever the node is swapped to!
 
 ## Built-in Engine Functions
 
-All parameters below are expected to be strings.
+All parameters below are expected to be strings. If the parameter is plural, then it expects them as an array of strings.
 
 `SetCurrentNode(nodeId)` 
 
     Change to the given node by it's ID.
 
+`GetNodeId()`
+
+    Returns the currently active node's ID.
+
 `SetNodeText(text)`
 
     Change the currently active node's text.
 
-`GetNodeText`
+`FormatNodeText()`
+
+    Inserts variables and assets into the currently active node.
+
+`GetNodeText()`
 
     Returns the currently active node's text.
-
-`GetNodeId()`
-
-    Returns the currently active node's ID.
 
 `GetAsset(assetId)`
 
@@ -52,9 +64,17 @@ All parameters below are expected to be strings.
 
     Resets the scripting environment.
 
-`FormatNodeText()`
+`GetNodeOptionLabels()`
 
-    Inserts variables and assets into the currently active node.
+    Returns an array of the current node's options as their visible text.
+
+`GetNodeOptionIds()`
+
+    Returns an array of the current node's options as their corresponding node IDs.
+
+`SetNodeOptions(optionLabels, optionIds)`
+
+    Change the currently active node's options.
 
 ## Example
 In `MyNode.node`
